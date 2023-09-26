@@ -1,19 +1,11 @@
 DMD = dmd
-OUT = build/main
-SRCS = src/main.d
+OUT = build/main.exe
+SRCS = src/*.d
 DFLAGS = -w
-INSTALL_PATH = /usr/local/bin/reaper
+MAKEFLAGS += --silent
 
 all: $(OUT)
 
 $(OUT): $(SRCS)
 	$(DMD) $(DFLAGS) -of$@ $^
-
-clean:
-	rm -f $(OUT)
-
-install: $(OUT)
-	ln -sf $(OUT) $(INSTALL_PATH)
-
-uninstall:
-	rm -f $(INSTALL_PATH)
+	echo Finnished

@@ -1,47 +1,27 @@
 import std.stdio;
-import std.socket;
-import std.conv;
+import std.string;
 
-void handleRequest(TcpConnection conn)
-{
-    auto clientAddr = conn.remoteAddr;
-    string response = "HTTP/1.1 200 OK\r\n";
-    response ~= "Content-Type: text/html\r\n";
-    response ~= "\r\n";
-    response ~= "lolz";
-    conn.write(response);
+import src.config;
+
+string getPort(string[] args) {
+    if(args[1].startsWith("-")) {
+        return args[2];
+    }
+    
+    return args[1];
 }
 
-void main(string[] args)
-{
-    if (args.length != 2)
-    {
-        writeln("Usage: reaper <port>");
-        return;
+int main(string[] args) {
+    if (args.length < 2) {
+        writeln("Usage: " ~ args[0] ~ " [options] <port> ");
+        return 1;
+    }
+    
+    if (args[1] == "-v") {
+        writeln("Reaper v" ~ getVersion() ~ ", Release. " ~ src.config.release);
     }
 
-    int port;
-    try
-    {
-        port = args[1].to!int;
-    }
-    catch (Exception e)
-    {
-        writeln("Invalid port number provided.");
-        return;
-    }
+    writeln("Starting to run reaper on port " ~ getPort());
 
-    // Create a TCP listener
-    auto listener = new TcpListener();
-    listener.bind(new InternetAddress("127.0.0.1", port));
-    listener.listen();
-
-    writeln("Server listening on port ", port);
-
-    while (true)
-    {
-        auto conn = listener.accept();
-        handleRequest(conn);
-        conn.close();
-    }
+    return 0;
 }
