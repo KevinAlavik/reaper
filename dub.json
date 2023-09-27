@@ -1,0 +1,20 @@
+{
+    "name": "reaper",
+    "dependencies": {
+        "vibe-d": "~>0.9.7"
+    },
+    "targetType": "executable",
+    "targetName": "reaper",
+    "configurations": [
+        {
+            "name": "VibeCustomBuild",
+            "buildType": "custom",
+            "sourcePaths": ["src"],
+            "importPaths": ["src"],
+            "stringImportPaths": ["src"]
+        }
+    ],
+    "subConfigurations": {
+        "VibeCustomBuild": "vibe-d:tls"
+    }
+}
