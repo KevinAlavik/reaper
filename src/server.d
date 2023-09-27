@@ -1,20 +1,15 @@
 module src.server;
-public import vibe.vibe;
+public import vibe.http.router;
 
-void index(HTTPServerRequest req, HTTPServerResponse res)
+void startServer(ushort port, string redirectUrl)
 {
-	res.writeBody("lolz");
-}
+    auto router = new URLRouter;
 
-void start(ushort port)
-{
-	auto router = new URLRouter;
-	router.get("/", &index);
-	
-	auto settings = new HTTPServerSettings;
-	settings.port = port;
-	
-	listenHTTP(settings, router);
-	
-	runApplication();
+    router.get("/", staticRedirect(redirectUrl));
+
+    auto settings = new HTTPServerSettings;
+    settings.port = port;
+    settings.bindAddresses = ["127.0.0.1"];
+
+    listenHTTP(settings, router);
 }

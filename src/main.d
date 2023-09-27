@@ -1,31 +1,21 @@
 import std.stdio;
-import std.string;
-import src.config;
+import std.conv;
 import src.server;
 
-string getPort(string[] args) {
-    if (args.length < 2) {
-        writeln("Usage: " ~ args[0] ~ " <port<int>>");
-        return "";
+void main(string[] args) {
+    if (args.length != 3) {
+        writeln("Usage: " ~ args[0] ~ " <port:int> <webUrl:string>");
+        return;
     }
 
-    if(args[1].isNumeric()) {
-        return args[1];
+    ushort port;
+    try {
+        port = args[1].to!ushort();
+    } catch (Exception e) {
+        writeln("Error parsing port: ", e.msg);
+        return;
     }
 
-
-    writeln("Usage: " ~ args[0] ~ " <port<int>>");
-    return "";
-}
-
-
-int main(string[] args) {
-    string port = getPort(args);
-    if (port == "") {
-        return 1;
-    }
-
-    writeln("Starting to run reaper on port " ~ port);
-    start(to!ushort(port));
-    return 0;
+    string webUrl = args[2];
+    startServer(port, webUrl);
 }
